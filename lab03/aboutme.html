@@ -1,0 +1,38 @@
+<!doctype html>
+<html >
+  <head>
+    <link rel="stylesheet" typr="text/css" href="css/mystyle.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <nav>
+      <button  class="button button1"><a href="main.html">Main</a></button>
+    </nav>
+    <title>About</title>
+  </head>
+  <body>
+    <h1>About Me</h1>
+    <p>ชื่อนาย : จตุภัทร  แจ่มฟ้า</p>
+    <p>ชื่อเล่น : บอส</p>
+    <p>อายุ : 21</p>
+    <p>ส่วนสูง : 181</p>
+    <p>น้ำหนัก : 80</p>
+    <p>บ้านเลขที่ : 20/4</p>
+    <p>เบอร์โทร : 0956785562</p>
+    <p>สัญชาติ : ไทย</p>
+    <br>
+    <h1>ของกินที่ชอบ</h1>
+    <ul id="food-list"></ul>
+
+    <script>
+      const foods = ['ข้าวขาหมู', 'หมูย่าง', 'ข้าวผัด', 'ข้าวซอย', 'ปลาหมึกย่าง'];
+      const foodList = document.getElementById('food-list');
+    
+      // Loop through the foods array and generate list items
+      foods.forEach(function(food) {
+        const listItem = document.createElement('li');
+        listItem.textContent = food;
+        foodList.appendChild(listItem);
+      });
+    </script>
+  </body>
+</html>
