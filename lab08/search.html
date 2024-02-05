@@ -34,8 +34,46 @@
                         ")'>" + "<br>";
                 }
             }
-            result.innerHTML = "<hr>ผลการค้นหา<br>" + "<hr>ชื่อหนังสือ" + "ชื่อหนังสือ" + "ชื่อหนังสือ<br>" +html;
+            result.innerHTML = "<hr>ผลการค้นหา<br>" + "<hr>ชื่อหนังสือ" + "  " + "  " + "ราคา" + "  " + "  " +"ผู้แต่ง<br>" +html;
         }
+
+           // delete book ตาม id
+           function deleteBook(id) {
+            for (var i = 0; i < books.length; i++) {
+                // ถ้า id ตรงกัน ให้ลบออกจาก array
+                if (books[i].id == id) {
+                    // อะเรย์ที่ตำแหน่ง i ลบออก 1 ตัว
+                    books.splice(i, 1);
+                }
+            }
+            // save to localStorage
+            localStorage.setItem("books", JSON.stringify(books));
+            // แสดงผล
+            searchBook();
+        }
+        // edit book
+        function editBook(id) {
+            for (var i = 0; i < books.length; i++) {
+                // ถ้า id ตรงกัน ให้นำค่าจาก books[i] ไปกำหนดให้ input แต่ละตัว
+                if (books[i].id == id) {
+                    document.getElementById("id").value = books[i].id;
+                    document.getElementById("book_name").value = books[i].name;
+                    document.getElementById("book_price").value = books[i].price;
+                    document.getElementById("book_author1").value = books[i].author1;
+                    document.getElementById("book_author2").value = books[i].author2;
+                    document.getElementById("book_author3").value = books[i].author3;
+                }
+            }
+        }
+        // อ่านจาก localStorage
+        // แปลง string ใน localStorage กลับเป็น array แล้วเก็บในตัวแปร books
+        var books = JSON.parse(localStorage.getItem("books"));
+        // ถ้า books เป็น null หมายความว่าไม่มีข้อมูลใน localStorage ให้ก าหนดให้เป็น array ว่าง
+        if (books == null) {
+            books = [];
+        }
+        // แสดงผล
+        searchBook();
 
 
 
