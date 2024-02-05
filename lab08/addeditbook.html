@@ -24,6 +24,16 @@
     <button onclick="addBook()">บันทึก</button>
 
     <script>
+        function findMaxBookId() {
+            var max = 0;
+            for (var i = 0; i < books.length; i++) {
+                if (books[i].id > max) {
+                    max = books[i].id;
+                }
+            }
+            return max;
+        }
+
         function addBook() {
             var id = document.getElementById("id").value;
             var name = document.getElementById("book_name").value;
@@ -59,7 +69,7 @@
             }
             // save to localStorage
             // แปลง array books เป็น string แล้วเก็บใน localStorage
-            localStorage.setItem("books", JSON.stringify(books));
+            localStorage.setItem("addeditbook", JSON.stringify(books));
             // clear input
             document.getElementById("id").value = "";
             document.getElementById("book_name").value = "";
