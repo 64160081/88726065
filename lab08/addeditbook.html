@@ -24,6 +24,7 @@
     <button onclick="addBook()">บันทึก</button>
 
     <script>
+        var books;
         function findMaxBookId() {
             var max = 0;
             for (var i = 0; i < books.length; i++) {
@@ -74,10 +75,13 @@
             document.getElementById("id").value = "";
             document.getElementById("book_name").value = "";
             document.getElementById("book_price").value = "";
+            document.getElementById("book_name").focus();
             document.getElementById("book_author1").value = "";
             document.getElementById("book_author2").value = "";
             document.getElementById("book_author3").value = "";
-            document.getElementById("book_name").focus();
+            
+
+            searchBook();
         }
     </script>
         
