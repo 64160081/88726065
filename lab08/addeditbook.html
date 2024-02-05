@@ -1,24 +1,75 @@
 ้ั<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book DB :: Add/Edit</title>
 </head>
+
 <body>
     <h3>Book DB :: Add/Edit</h3>
     <input type="hidden" id="id">
     <input type="text" id="book_name" placeholder="ชื่อหนังสือ">
-    <hr>
+    <br>
     <input type="text" id="book_price" placeholder="ราคา">
-    <hr>
-    <input type="text" id="book_author" placeholder="ผู้แต่ง-1">
-    <hr>
+    <br>
+    <input type="text" id="book_author1" placeholder="ผู้แต่ง-1">
+    <br>
     <input type="text" id="book_author2" placeholder="ผู้แต่ง-2">
-    <hr>
+    <br>
     <input type="text" id="book_author3" placeholder="ผู้เเต่ง-3">
-    <hr>
+    <br>
     <button onclick="addBook()">บันทึก</button>
+
+    <script>
+        function addBook() {
+            var id = document.getElementById("id").value;
+            var name = document.getElementById("book_name").value;
+            var price = document.getElementById("book_price").value;
+            var author1 = document.getElementById("book_author1").value;
+            var author2 = document.getElementById("book_author2").value;
+            var author3 = document.getElementById("book_author3").value;
+            // ถ้า id ว่าง แสดงว่าเป็นการเพิ่มใหม่
+            if (id == "") {
+                // หา id ที่มากที่สุด แล้วบวก 1
+                id = findMaxBookId() + 1;
+                // สร้าง object book
+                var book = {
+                    id: id,
+                    name: name,
+                    price: price
+                };
+                // เพิ่ม object book ต่อท้ายใน array books
+                books.push(book);
+            } else {
+                // ถ้า id ไม่ว่าง แสดงว่าเป็นการแก้ไข
+                // ค้นหา id ที่ตรงกับ id ใน hidden input
+                for (var i = 0; i < books.length; i++) {
+                    // ถ้า id ตรงกัน ให้แก้ไข name และ price
+                    if (books[i].id == id) {
+                        books[i].name = name;
+                        books[i].price = price;
+                        books[i].author1 = author1;
+                        books[i].author2 = author2;
+                        books[i].author3 = author3;
+                    }
+                }
+            }
+            // save to localStorage
+            // แปลง array books เป็น string แล้วเก็บใน localStorage
+            localStorage.setItem("books", JSON.stringify(books));
+            // clear input
+            document.getElementById("id").value = "";
+            document.getElementById("book_name").value = "";
+            document.getElementById("book_price").value = "";
+            document.getElementById("book_author1").value = "";
+            document.getElementById("book_author2").value = "";
+            document.getElementById("book_author3").value = "";
+            document.getElementById("book_name").focus();
+        }
+    </script>
+        
 </body>
 </html>
