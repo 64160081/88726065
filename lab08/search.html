@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book DB</title>
+</head>
+<body>
+    <h3>Book DB</h3>
+    ค้นหาหนังสือ : <input type="text" id="search" onkeyup="searchBook()"> <br>
+    <div id="result"></div>
+    <button onclick="addBook()">เพิ่ม</button>
+
+    <script>
+        var books;
+        function searchBook() {
+            var search = document.getElementById("search").value;
+            var result = document.getElementById("result");
+            var html = "";
+            for (var i = 0; i < books.length; i++) {
+                // ต่อ string id และ name และ price ด้วย |
+                str = books[i].id + "|" + books[i].name + "|" + books[i].price;
+                // ถ้า str มีค าที่ค้นหา ให้แสดงผล
+                if (str.toLowerCase().includes(search.toLowerCase())) {
+                    html += books[i].id + "  " + books[i].name + "  " + books[i].price +  "  " + books[i].author1 + "," + books[i].author2 + "," + books[i].author3 + "  " +
+
+                        "<img src='https://t.ly/mtMN' onclick='editBook(" + books[i].id +
+
+                        ")'>"+ 
+
+                        "<img src='https://t.ly/523J' onclick='deleteBook(" + books[i].id +
+
+                        ")'>" + "<br>";
+                }
+            }
+            result.innerHTML = "<hr>ผลการค้นหา<br>" + "<hr>ชื่อหนังสือ" + "ชื่อหนังสือ" + "ชื่อหนังสือ<br>" +html;
+        }
+
+
+    </script>
+
+</body>
+</html>
