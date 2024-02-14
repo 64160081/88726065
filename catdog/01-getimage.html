@@ -1,0 +1,21 @@
+<div>
+  <h1>Random Cat Image</h1>
+  <button id="btn">Get new cat</button>
+</div>
+<img
+  id="catImage"
+  src="https://cdn2.thecatapi.com/images/dho.jpg"
+  width="75%"
+/>
+
+<script>
+  document.getElementById("btn").addEventListener("click", () => {
+    const endPoint = "https://api.thecatapi.com/v1/images/search";
+    fetch(endPoint)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        document.getElementById("catImage").src = data[0].url;
+      });
+  });
+</script>

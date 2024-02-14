@@ -1,0 +1,31 @@
+<h3>Delete a cat</h3>
+<input type="text" id="catId" placeholder="Enter cat id" />
+<button onclick="deleteCat()">Delete</button>
+<div id="deleteResults"></div>
+<script>
+  const API_URL = "https://api.thecatapi.com/v1/";
+  const API_KEY =
+    "live_wi8W9uSCtfH06vGrPz5g1a6S2b9wkMBBTWqfHBd3gP2ctcr4X6mRJLjFi3Sc8hOy";
+
+  function deleteCat() {
+    const catId = document.getElementById("catId").value;
+    fetch(`${API_URL}images/${catId}`, {
+      method: "POST",
+      headers: {
+        "x-api-key": API_KEY,
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        document.getElementById(
+          "deleteResults"
+        ).innerHTML = `<p>${data.message}</p>`;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+</script>

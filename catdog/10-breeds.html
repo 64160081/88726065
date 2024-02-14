@@ -1,0 +1,48 @@
+<style>
+  a {
+    display: block;
+    text-decoration: none;
+    color: black;
+  }
+  a:hover {
+    background-color: lightpink;
+  }
+</style>
+<h1>Breeds List</h1>
+<div id="disp"></div>
+<script>
+  endPoint = "https://api.thecatapi.com/v1/breeds";
+  fetch(endPoint)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      data.forEach((element) => {
+        document.getElementById("disp").innerHTML +=
+          "<a onclick='getImage(" +
+          '"' +
+          element.id +
+          '"' +
+          ")'>" +
+          element.id +
+          " - " +
+          element.name +
+          "</a><div id='" +
+          element.id +
+          "'></div>";
+      });
+    });
+
+  function getImage(breedId) {
+    console.log(breedId);
+    endPoint =
+      "https://api.thecatapi.com/v1/images/search?breed_ids=" + breedId;
+    console.log(endPoint);
+    fetch(endPoint)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        document.getElementById(breedId).innerHTML =
+          "<img src='" + data[0].url + "' width='25%'>";
+      });
+  }
+</script>

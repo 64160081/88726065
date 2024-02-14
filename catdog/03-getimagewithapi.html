@@ -1,0 +1,19 @@
+<div id="catImages"></div>
+<script>
+  apiKey =
+    "live_wi8W9uSCtfH06vGrPz5g1a6S2b9wkMBBTWqfHBd3gP2ctcr4X6mRJLjFi3Sc8hOy";
+  endPoint =
+    "https://api.thecatapi.com/v1/images/search?limit=1&breed_ids=beng&api_key=" +
+    apiKey;
+  fetch(endPoint)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      document.getElementById("catImages").innerHTML = "";
+      data.forEach((cat) => {
+        console.log(cat);
+        document.getElementById("catImages").innerHTML +=
+          "<img src='" + cat.url + "' width='25%'>";
+      });
+    });
+</script>

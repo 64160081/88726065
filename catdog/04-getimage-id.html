@@ -1,0 +1,67 @@
+<img id="catImage" src="cutecat.webp" width="50%" alt="" />
+<div id="catinfo"></div>
+
+<script>
+  // response
+  // {
+  // "id":"0XYvRd7oD",
+  // "width":1204,"height":1445,
+  // "url":"https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg",
+  // "breeds":[{
+  //     "weight":{"imperial":"7  -  10","metric":"3 - 5"},
+  //     "id":"abys",
+  //     "name":"Abyssinian",
+  //     "temperament":"Active, Energetic, Independent, Intelligent, Gentle",
+  //     "origin":"Egypt",
+  //     "country_codes":"EG",
+  //     "country_code":"EG",
+  //     "life_span":"14 - 15",
+  //     "wikipedia_url":"https://en.wikipedia.org/wiki/Abyssinian_(cat)"
+  // }]
+  // }
+
+  // step 1 get id from api in synchronous way  (id is used in step 2)
+  url = "https://api.thecatapi.com/v1/images/search";
+  endPoint = "https://api.thecatapi.com/v1/images/";
+  var id = "";
+  async function getIdFromApi() {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data[0].id);
+    return data[0].id;
+  }
+
+  async function main() {
+    // ดึง id ก่อนไป step 2
+    id = await getIdFromApi();
+    getCatInfo(id);
+  }
+
+  main();
+
+  // step 2
+  function getCatInfo(id) {
+    if (id != "") {
+      endPoint = endPoint + id;
+      fetch(endPoint)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          document.getElementById("catImage").src = data.url;
+          document.getElementById("catinfo").innerHTML =
+            "Name : " + data.breeds[0].name + "<br>";
+          document.getElementById("catinfo").innerHTML +=
+            "Temperament : " + data.breeds[0].temperament + "<br>";
+          document.getElementById("catinfo").innerHTML +=
+            "Origin : " + data.breeds[0].origin + "<br>";
+          document.getElementById("catinfo").innerHTML +=
+            "Life Span : " + data.breeds[0].life_span + "<br>";
+          document.getElementById("catinfo").innerHTML +=
+            "Wikipedia : " +
+            "<a href='" +
+            data.breeds[0].wikipedia_url +
+            "'>Click Here</a>";
+        });
+    }
+  }
+</script>

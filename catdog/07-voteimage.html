@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Let your users Vote on Kitties</title>
+    <link rel="stylesheet" href="07-style.css" />
+  </head>
+  <body>
+    <div id="vote-options" class="vote-options">
+      <button onClick="vote(1)">Vote Up</button>
+      <button onClick="vote(-1)">Vote Down</button>
+      <button onClick="showHistoricVotes()">Vote History</button>
+
+      <div>
+        <img id="image-to-vote-on" class="col-lg" />
+      </div>
+    </div>
+
+    <div id="vote-results" class="vote-results">
+      <button onClick="showVoteOptions()">Back to Voting</button>
+      <div id="grid" class="imgrid" />
+    </div>
+
+    <script>
+      // กำหนด url และ api key
+      const API_URL = `https://api.thecatapi.com/v1/`;
+      const API_KEY =
+        "live_wi8W9uSCtfH06vGrPz5g1a6S2b9wkMBBTWqfHBd3gP2ctcr4X6mRJLjFi3Sc8hOy";
+
+      // กำหนดตัวแปรเพื่อเก็บข้อมูลรูปภาพที่จะให้โหวต
+      let currentImageToVoteOn;
+
+      // ฟังก์ชันแสดงรูปภาพที่จะให้โหวต
+      function showHistoricVotes() {
+        document.getElementById("vote-options").style.display = "none";
+        document.getElementById("vote-results").style.display = "block";
+
+        //
+        const url = `${API_URL}votes?limit=10&order=DESC`;
+
+        //
+        fetch(url, {
+          headers: {
+            "x-api-key": API_KEY,
+          },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            // .map คือการวนลูปข้อมูลทุกตัวแล้ว return ค่าใหม่ โดยจะได้ array ใหม่ที่มีขนาดเท่าเดิม แต่ข้อมูลเปลี่ยนไป ตามที่เรา return ออกมา ในที่นี้คือการ return ออกมาเป็น tag img ที่มี src ตามที่ได้จากข้อมูล แล้ว append ลงใน div ที่มี id เป็น grid ที่เราสร้างไว้ แล้วแสดงผล ในที่นี้คือรูปภาพที่มีการโหวตล่าสุด 10 รูป โดยเรียงจากมากไปน้อย แล้วแสดงผล
+            data.map(function (voteData) {
+              console.log(voteData);
+
+              const imageData = voteData.image;
+              console.log(imageData);
+
+              // สร้าง tag img ขึ้นมาเพื่อใส่รูปภาพที่ได้จากการโหวต
+              let image = document.createElement("img");
+              image.src = imageData.url;
+
+              // สร้าง div ขึ้นมาเพื่อใส่รูปภาพที่ได้จากการโหวต แล้วแสดงผล
+              let gridCell = document.createElement("div");
+
+              // ถ้าค่าโหวตน้อยกว่า 0 ให้เพิ่ม class red ถ้ามากกว่า 0 ให้เพิ่ม class green
+              if (voteData.value < 0) {
+                gridCell.classList.add("red");
+              } else {
+                gridCell.classList.add("green");
+              }
+
+              // ใส่ class col และ col-lg แล้ว append รูปภาพลงไป
+              gridCell.classList.add("col-lg");
+              gridCell.appendChild(image);
+
+              document.getElementById("grid").appendChild(gridCell);
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+
+      function showVoteOptions() {
+        // ล้างข้อมูลที่อยู่ใน div ที่มี id เป็น grid แล้วแสดงผล
+        document.getElementById("grid").innerHTML = "";
+        // แสดง div ที่มี id เป็น vote-options และซ่อน div ที่มี id เป็น vote-results
+        document.getElementById("vote-options").style.display = "block";
+        // ซ่อน div ที่มี id เป็น vote-results
+        document.getElementById("vote-results").style.display = "none";
+
+        showImageToVoteOn();
+      }
+
+      function showImageToVoteOn() {
+        const url = `${API_URL}images/search`;
+
+        fetch(url, {
+          headers: {
+            "x-api-key": API_KEY,
+          },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            currentImageToVoteOn = data[0];
+            document.getElementById("image-to-vote-on").src =
+              currentImageToVoteOn.url;
+          });
+      }
+
+      function vote(value) {
+        const url = `${API_URL}votes/`;
+        const body = {
+          image_id: currentImageToVoteOn.id,
+          value,
+        };
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: {
+            "content-type": "application/json",
+            "x-api-key": API_KEY,
+          },
+        }).then((response) => {
+          showVoteOptions();
+        });
+      }
+
+      showVoteOptions();
+    </script>
+  </body>
+</html>
