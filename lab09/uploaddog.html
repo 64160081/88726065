@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload a Dog</title>
+</head>
+<body>
+    <h3>Upload a Dog</h3>
+    <input type="file" id="fileInput" />
+    <input type="hidden" name="sub-id" id="sub-id" value="Doge" />
+    <button onclick="uploadImage()">Upload</button>
+    <div id="uploadResults"></div>
+    <script>
+        const API_URL = "https://api.thedogapi.com/v1/";
+        const API_KEY = "live_ynxZxMM5B77vTGTO880ZIpcmpF3ukSgJSgxkMsTUcuCJGjDGJI52qXiGOagEVDvO";
+
+        function uploadImage() {
+            const fileInput = document.getElementById("fileInput");
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch(`${API_URL}images/upload`, {
+                method: "POST",
+                headers: {
+                    "x-api-key": API_KEY,
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById("uploadResults").innerHTML = `<img src="${data.url}" width="20%" />`;
+                // เพิ่มรูปภาพที่อัพโหลดในหน้า index.html
+                const indexImagesContainer = window.opener.document.getElementById('images-container');
+                const newImageElement = document.createElement('img');
+                newImageElement.src = data.url;
+                newImageElement.alt = 'รูปสุนัข';
+                indexImagesContainer.appendChild(newImageElement);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+</html>
