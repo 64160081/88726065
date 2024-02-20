@@ -1,54 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload a Dog</title>
+    <title>รูปสุนัข</title>
     <style>
         img {
-            max-width: 200px; /* กำหนดความกว้างสูงสุดของรูปภาพ */
-            max-height: 200px; /* กำหนดความสูงสูงสุดของรูปภาพ */
+            max-width: 200px;
+            /* กำหนดความกว้างสูงสุดของรูปภาพ */
+            max-height: 200px;
+            /* กำหนดความสูงสูงสุดของรูปภาพ */
         }
     </style>
 </head>
+
 <body>
-    <h3>Upload a Dog</h3>
-    <input type="file" id="fileInput" />
-    <input type="hidden" name="sub-id" id="sub-id" value="Doge" />
-    <button onclick="uploadImage()">Upload</button>
-    <div id="uploadResults"></div>
+    <h1>รูปสุนัข</h1>
+    <div id="images-container">
+        <!-- รูปสุนัขจะถูกแสดงที่นี่ -->
+    </div>
+    <button onclick="openUploadPage()">อัพโหลดรูปสุนัข</button>
     <script>
-        const API_URL = "https://api.thedogapi.com/v1/";
-        const API_KEY = "live_ynxZxMM5B77vTGTO880ZIpcmpF3ukSgJSgxkMsTUcuCJGjDGJI52qXiGOagEVDvO";
+        // JavaScript เพื่อโหลดรูปสุนัขและลบรูป
+        function openUploadPage() {
+            window.open('uploaddog.html', '_blank', 'width=600,height=400');
+        }
 
-        function uploadImage() {
-            const fileInput = document.getElementById("fileInput");
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
+        fetch('/images/search')
+            .then(response => response.json())
+            .then(images => {
+                const imagesContainer = document.getElementById('images-container');
+                if (images.length > 0) {
+                    images.forEach(image => {
+                        const imageElement = document.createElement('img');
+                        imageElement.src = image.url;
+                        imageElement.alt = 'รูปสุนัข';
+                        imagesContainer.appendChild(imageElement);
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'ลบ';
+                        deleteButton.addEventListener('click', () => {
+                            fetch(`/images/${image.id}`, { method: 'DELETE' })
+                                .then(() => {
+                                    imageElement.remove();
+                                    deleteButton.remove();
+                                })
+                                .catch(error => console.error('เกิดข้อผิดพลาดในการลบรูป: ', error));
+                        });
+                        imagesContainer.appendChild(deleteButton);
+                    });
+                } else {
+                    const noImagesMessage = document.createElement('p');
+                    noImagesMessage.textContent = 'ไม่พบรูปสุนัขของคุณ';
+                    imagesContainer.appendChild(noImagesMessage);
+                }
+            })
+            .catch(error => console.error('เกิดข้อผิดพลาดในการโหลดรูป: ', error));
 
-            fetch(`${API_URL}images/upload`, {
-                method: "POST",
+        function getMyUpload() {
+            fetch(`${API_URL}images/?limit=10&page=0&order=DESC`, {
+                method: "GET",
                 headers: {
                     "x-api-key": API_KEY,
                 },
-                body: formData,
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                document.getElementById("uploadResults").innerHTML = `<img src="${data.url}" width="20%" />`;
-                // เพิ่มรูปภาพที่อัพโหลดในหน้า index.html
-                const indexImagesContainer = window.opener.document.getElementById('images-container');
-                const newImageElement = document.createElement('img');
-                newImageElement.src = data.url;
-                newImageElement.alt = 'รูปสุนัข';
-                indexImagesContainer.appendChild(newImageElement);
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    let disp = document.getElementById("disp");
+                    data.forEach((element) => {
+                        disp.innerHTML += `<img src="${element.url}" width="22%" title="${element.id}"/>`;
+                        // link for delete image by id
+                        disp.innerHTML += `<a href="#" onclick="deleteImage('${element.id}')"><img src="images/delete-24.png"></a>`;
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        getMyUpload();
+
+        function deleteImage(pid) {
+            fetch(`${API_URL}images/${pid}`, {
+                method: "DELETE",
+                headers: {
+                    "x-api-key": API_KEY,
+                },
             })
-            .catch(error => {
-                console.log(error);
-            });
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    alert("Image deleted successfully");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     </script>
 </body>
+
 </html>
