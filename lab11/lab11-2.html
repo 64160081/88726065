@@ -10,6 +10,7 @@
     <style>
         .errors {
             color : red;
+            
         }
     </style>
     
@@ -22,9 +23,9 @@
         <form @submit.prevent="checkForm">
             <p v-if="errors.length">
                 <b>Please correct the following error(s):</b>
-            <ul>
-                <li v-for="error in errors">{{ error }}</li>
-            </ul>
+                <ul>
+                    <li v-for="error in errors" class="error">{{ error }}</li>
+                </ul>
             </p>
             <p>
                 <label for="name">Name</label>
