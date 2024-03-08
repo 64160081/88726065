@@ -29,9 +29,9 @@
                 <input type="number" name="age" id="age" v-model="age" min="0">
             </p>
             <p>
-                <input type="radio" id="male" value="Male" v-model="picked">
+                <input type="radio" id="male" value="Male" v-model="sex">
                 <label for="male">Male</label>
-                <input type="radio" id="female" value="Female" v-model="picked">
+                <input type="radio" id="female" value="Female" v-model="sex">
                 <label for="female">Female</label>
             </p>
             <p>
@@ -65,6 +65,7 @@
                     this.errors = [];
                     if (!this.name) this.errors.push("Name required.");
                     if (!this.age) this.errors.push("Age required.");
+                    if (!this.sex) this.errors.push("Sex required.");
                     // prevent form submission
 
                     // e.preventDefault();
