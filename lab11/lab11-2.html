@@ -60,16 +60,16 @@
             },
             methods: {
                 checkForm(e) {
-                    // alert(this.name + ", " + this.age + ", " + this.sex + ", " + this.movie)
-                    // if (this.name && this.age) return true;
+                    alert(this.name + ", " + this.age + ", " + this.sex + ", " + this.movie)
+                    if (this.name && this.age) return true;
                     this.errors = [];
                     if (!this.name) this.errors.push("Name required.");
                     if (!this.age) this.errors.push("Age required.");
                     if (!this.sex) this.errors.push("Sex required.");
                     if (!this.movie) this.errors.push("Movie required.");
-                    // prevent form submission
+                    //prevent form submission
 
-                    // e.preventDefault();
+                    e.preventDefault();
                 }
             }
         }).mount('#app');
