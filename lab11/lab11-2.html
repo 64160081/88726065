@@ -29,6 +29,12 @@
                 <input type="number" name="age" id="age" v-model="age" min="0">
             </p>
             <p>
+                <input type="radio" id="male" value="Male" v-model="picked">
+                <label for="male">Male</label>
+                <input type="radio" id="female" value="Female" v-model="picked">
+                <label for="female">Female</label>
+            </p>
+            <p>
                 <label for="movie">Your favorite Movie</label>
                 <select name="movie" id="movie" v-model="movie">
                     <option>Star Wars</option>
